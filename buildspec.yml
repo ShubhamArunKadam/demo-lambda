@@ -1,0 +1,17 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      python: 3.12
+    commands:
+      - pip install -r requirements.txt -t .
+  build:
+    commands:
+      - zip -r artifact.zip .
+  post_build:
+    commands:
+      - echo "Updating Lambda code..."
+      - aws lambda update-function-code --function-name hello-lambda --zip-file fileb://artifact.zip
+artifacts:
+  files:
+    - artifact.zip
